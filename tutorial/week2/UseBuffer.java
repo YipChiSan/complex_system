@@ -25,23 +25,32 @@ class BoundedBuffer
   public synchronized void put(int input)
     throws InterruptedException
   {
-    if (buffer.size() < MAXSIZE) {
-      buffer.add(input);
+    while (buffer.size() >= MAXSIZE) {
+      wait();
     }
+  
+    notifyAll();
+    buffer.add(input);
+    
+    
   }
 
   // take an element from the front of the buffer
   public synchronized int get()
     throws InterruptedException
   {
-    int result = buffer.remove(0);
-    return result;
-  }
+    while (buffer.isEmpty()) {
+      wait();
+    } 
+      notifyAll();
+      return buffer.remove(0);
+    }
+  
 
   public int size()
   {
-    int result = buffer.size();
-    return result;
+    
+    return buffer.size();
   }
 }
 
@@ -67,16 +76,16 @@ class Producer extends Thread
     try {
       while (true) {
 
-	//insert a random integer
-	int next = random.nextInt();
-	buffer.put(next);
+	      //insert a random integer
+	      int next = random.nextInt();
+	      buffer.put(next);
 
-	//sleep for a random period between
-	//0 and 99 milliseconds
-	int sleep = random.nextInt(10);
-	Thread.sleep(sleep);
+	      //sleep for a random period between
+	      //0 and 99 milliseconds
+	      int sleep = random.nextInt(10);
+	      Thread.sleep(sleep);
 
-	System.err.println("b.size() = " + buffer.size());
+	      System.err.println("b.size() = " + buffer.size());
       }
     }
     catch (InterruptedException e) {}
