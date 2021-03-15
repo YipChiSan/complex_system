@@ -79,7 +79,7 @@ class Producer extends Thread
 	      //insert a random integer
 	      int next = random.nextInt();
 	      buffer.put(next);
-
+        System.err.println("Producer puts " + next);
 	      //sleep for a random period between
 	      //0 and 99 milliseconds
 	      int sleep = random.nextInt(10);
@@ -117,7 +117,7 @@ class Consumer extends Thread
 	//get the next integer from the buffer
 	int next = buffer.get();
 
-	System.err.println("next = " + next);
+	System.err.println("Consumers gets " + next);
 
 	//sleep for a random period between
 	//0 and 49 milliseconds
