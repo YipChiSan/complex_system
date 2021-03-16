@@ -13,11 +13,12 @@ class BoundedBuffer
 {
   // the maximum size of the bounded buffer
   final public static int MAXSIZE = 10;
-  Semaphore sem = new Semaphore(1);
+  Semaphore notFull = new Semaphore(10);
+  Semaphore notEmpty = new Semaphore(0);
   int result;
 
   // the buffer
-  private volatile List<Integer> buffer;
+  private List<Integer> buffer;
 
   public BoundedBuffer()
   {
@@ -28,28 +29,21 @@ class BoundedBuffer
   public void put(int input)
     throws InterruptedException
   {
-    while (buffer.size() >= MAXSIZE);
-    System.err.println("Producer is asking for permission..");
-    sem.acquire();
+    notFull.acquire();
     buffer.add(input);
-    System.err.println("Producer is releasing permission..");
-    sem.release();
-    
-  
-    
-    
+    notEmpty.release();
   }
 
   // take an element from the front of the buffer
   public int get()
     throws InterruptedException
   {
-    while (buffer.isEmpty());
-    System.err.println("Consumer is asking for permission..");
-    sem.acquire();
+    
+  
+    notEmpty.acquire();
     result = buffer.remove(0);
-    System.err.println("Consumer is releasing permission..");
-    sem.release();
+    
+    notFull.release();
     
     return result;
       
