@@ -71,16 +71,14 @@ class Synchronise
   {
     // the code to synchronise goes here
     
-    if (isWaiting) {
-      notify();
-      isWaiting = false;
+    if (!isWaiting) {
+      isWaiting = true;
+      try{wait();} catch (Exception e){}
       
     }
     else {
-        isWaiting = true;
-        try {
-        Thread.sleep(1000);
-        } catch (Exception e) { }
+        notifyAll();
+        isWaiting = false;
     }
       }
       
