@@ -1,3 +1,4 @@
 interface Destination{
-    public boolean isEmpty();
+    public void putVial(Vial vial) throws InterruptedException;
+    public Vial getVial() throws InterruptedException;
 } 
