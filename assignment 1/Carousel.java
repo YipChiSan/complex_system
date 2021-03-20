@@ -4,7 +4,7 @@
  * scanned and potentially removed by a shuttle for further inspection, 
  * through to the final compartment where they are taken off the carousel.
  */
-public class Carousel {
+public class Carousel implements Destination {
 
     // the items in the carousel segments
     protected Vial[] compartment;
