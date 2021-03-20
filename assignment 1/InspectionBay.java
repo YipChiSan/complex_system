@@ -10,8 +10,20 @@ import java.util.ArrayList;
     private ArrayList<Vial> holdingVial = new ArrayList<>(); 
 
     // Place a vial to the inspection bay
-    public void setVial(Vial vial) {
-        this.holdingVial.add(vial);
+    public synchronized void putVial(Vial vial) {
+        // while there is another vial in the way, block this thread
+        while (!isEmpty()) {
+            wait();
+        }
+        
+        // insert the element 
+        holdingVial.add(vial);
+        
+        // make a note of the event in output trace
+        System.out.println(vial + " inspecting");
+        
+        // notify any waiting threads that the carousel state has changed
+        notifyAll();
     }
 
 
@@ -20,7 +32,7 @@ import java.util.ArrayList;
         throws OverloadException{
 
         // Inspection bay should wait until there is a vial in the inspection bay.
-        while (holdingVial.isEmpty()){
+        while (isEmpty()){
             wait();
         }
 
@@ -35,7 +47,7 @@ import java.util.ArrayList;
     }
 
     // Pass the inspected vial to the shuttle
-    public synchronized Vial giveVial()
+    public synchronized Vial getVial()
         throws OverloadException{
 
             // do not give the holding vial to the shuttle until the vial has been tagged
@@ -52,7 +64,7 @@ import java.util.ArrayList;
             return holdingVial.remove(0);
         }
 
-    public boolean isEmpty(){
+    private boolean isEmpty(){
         return holdingVial.isEmpty();
     }
 
