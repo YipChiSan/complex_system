@@ -11,7 +11,8 @@ import java.util.ArrayList;
     private ArrayList<Vial> holdingVial = new ArrayList<>(); 
 
     // Place a vial to the inspection bay
-    public synchronized void putVial(Vial vial) {
+    public synchronized void putVialByShuttle(Vial vial) 
+        throws InterruptedException{
         // while there is another vial in the way, block this thread
         while (!isEmpty()) {
             wait();

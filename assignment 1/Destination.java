@@ -1,4 +1,4 @@
 interface Destination{
-    public void putVial(Vial vial) throws InterruptedException;
+    public void putVialByShuttle(Vial vial) throws InterruptedException;
     public Vial getVialByShuttle() throws InterruptedException;
 } 
