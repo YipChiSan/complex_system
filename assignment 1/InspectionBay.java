@@ -7,6 +7,9 @@ import java.util.ArrayList;
  public class InspectionBay
     implements Destination{
 
+    // to help format output trace
+    final private static String indentation = "                  ";
+
     // The vial held by the inspection bay.
     private ArrayList<Vial> holdingVial = new ArrayList<>(); 
 
@@ -50,20 +53,25 @@ import java.util.ArrayList;
 
     // Pass the inspected vial to the shuttle
     public synchronized Vial getVialByShuttle()
-        throws OverloadException{
+        throws InterruptedException{
 
             // do not give the holding vial to the shuttle until the vial has been tagged
             while (holdingVial.isEmpty() ||
                 (!holdingVial.isEmpty() && !holdingVial.get(0).isTagged())){
                 wait();
             }
+
+            returnVial = holdingVial.remove(0);
     
-            // Inspection cannot hold more than one vial.
-            if (holdingVial.size() > 1) {
-                throw OverloadException("An inspection bay cannot hold more than one vial");
-            }
+            // make a note of the event in output trace
+            System.out.print(indentation + indentation);
+            System.out.println(vial + " removed from inspection bay");
+
+            // notify any waiting threads that the carousel has changed
+            notifyAll();
+            
     
-            return holdingVial.remove(0);
+            return returnVial;
         }
 
     private boolean isEmpty(){
