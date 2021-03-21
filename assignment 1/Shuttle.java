@@ -4,8 +4,13 @@
  */
 
  public class Shuttle extends VaccineHandlingThread {
+
+    // to help format output trace
+    final private static String indentation = "                  ";
     Destination start;
     Destination destination;
+
+
 
     /**
      * Create a new Shuttle to transfer vial from start to destination. 
@@ -27,10 +32,20 @@
             try{
                 holdingVial = this.start.getVialByShuttle();
                 sleep(Params.SHUTTLE_TIME);
+
                 this.destination.putVialByShuttle(holdingVial);
+                System.out.println(
+                    indentation +
+                    holdingVial +
+                    " [ S" + " -> I" +" ]");
+
                 holdingVial = this.destination.getVialByShuttle();
-                System.out.println("Shuttling is comming back");
+                System.out.println(
+                    indentation +
+                    holdingVial +
+                    " [ I" + " -> S" +" ]");
                 sleep(Params.SHUTTLE_TIME);
+
                 this.start.putVialByShuttle(holdingVial);
             } catch (InterruptedException e){
                 this.interrupt();

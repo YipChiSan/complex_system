@@ -28,9 +28,6 @@
         // insert the element 
         holdingVial[0] = vial;
         
-        // make a note of the event in output trace
-        System.out.println(vial + " inspecting");
-        
         // notify any waiting threads that the carousel state has changed
         notifyAll();
     }
@@ -68,10 +65,6 @@
 
             returnVial = holdingVial[0];
             holdingVial[0] = null;
-    
-            // make a note of the event in output trace
-            System.out.print(indentation + indentation);
-            System.out.println(returnVial + " removed from inspection bay");
 
             // notify any waiting threads that the carousel has changed
             notifyAll();

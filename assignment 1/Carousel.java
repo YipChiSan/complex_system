@@ -69,7 +69,10 @@ public class Carousel implements Destination {
         compartment[compartment.length / 2] = vial;
 
         // make a note of the event in output trace
-        System.out.println(vial + " inserted");
+        System.out.println(
+            indentation +
+            vial +
+            " [ S" + " -> c" + ((compartment.length / 2 + 1)) + " ]");
 
         // notify any waiting threads that the carousel state has changed
         notifyAll();
@@ -121,19 +124,20 @@ public class Carousel implements Destination {
         // while there is no vial in the middle compartment or the vial is not defective, block this thread
         while (compartment[compartment.length / 2] == null || 
             (compartment[compartment.length / 2] != null &&
-             !compartment[compartment.length / 2].isDefective())) {
+             (!compartment[compartment.length / 2].isDefective() || 
+             compartment[compartment.length / 2].isTagged()))) {
             wait();
         }
-
-       
 
         // get the vial
         vial = compartment[compartment.length / 2];
         compartment[compartment.length / 2] = null;
 
         // make a note of the event in output trace
-        System.out.print(indentation + indentation);
-        System.out.println(vial + " removed for inspection");
+        System.out.println(
+            indentation +
+            vial +
+            " [ c"+ ((compartment.length / 2 + 1)) + " -> S" +" ]");
 
         // notify any waiting threads that the carousel has changed
         notifyAll();
@@ -162,6 +166,14 @@ public class Carousel implements Destination {
             String message = "vial rotated beyond final compartment";
             throw new OverloadException(message);
         }
+
+        // a vial cannot be rotated if it is defective and not tagged and in the middle of carousel
+        while (compartment[compartment.length / 2] != null &&
+            compartment[compartment.length / 2].isDefective() &&
+            !compartment[compartment.length / 2].isTagged()) {
+                wait();
+            }
+
 
         // move the elements along, making position 0 null
         for (int i = compartment.length-1; i > 0; i--) {
