@@ -29,6 +29,7 @@
                 sleep(Params.SHUTTLE_TIME);
                 this.destination.putVialByShuttle(holdingVial);
                 holdingVial = this.destination.getVialByShuttle();
+                System.out.println("Shuttling is comming back");
                 sleep(Params.SHUTTLE_TIME);
                 this.start.putVialByShuttle(holdingVial);
             } catch (InterruptedException e){

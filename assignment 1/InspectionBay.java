@@ -1,4 +1,3 @@
-import java.util.ArrayList;
 
 /**
  * An InspectionBay is to inspect the defective vaccine and tag them.
@@ -11,8 +10,12 @@ import java.util.ArrayList;
     final private static String indentation = "                  ";
 
     // The vial held by the inspection bay.
-    private ArrayList<Vial> holdingVial = new ArrayList<>(); 
+    private Vial[] holdingVial;
 
+    public InspectionBay(){
+        holdingVial = new Vial[1];
+        holdingVial[0] = null;
+    }
     // Place a vial to the inspection bay
     @Override
     public synchronized void putVialByShuttle(Vial vial) 
@@ -23,7 +26,7 @@ import java.util.ArrayList;
         }
         
         // insert the element 
-        holdingVial.add(vial);
+        holdingVial[0] = vial;
         
         // make a note of the event in output trace
         System.out.println(vial + " inspecting");
@@ -35,22 +38,19 @@ import java.util.ArrayList;
 
     // Inspect the vial at the inspection bay
     public synchronized void inspect()
-        throws InterruptedException, OverloadException{
+        throws InterruptedException{
 
         // Inspection bay should wait until there is a vial in the inspection bay.
         while (isEmpty()){
             wait();
         }
 
-        // Inspection cannot hold more than one vial.
-        if (holdingVial.size() > 1) {
-            throw new OverloadException("An inspection bay cannot hold more than one vial");
-        }
-
-        if(!holdingVial.get(0).isTagged() &&
-            holdingVial.get(0).isDefective()){
+        if(!holdingVial[0].isTagged() &&
+            holdingVial[0].isDefective()){
             tagVial();
         }
+
+        notifyAll();
     }
 
     // Pass the inspected vial to the shuttle
@@ -61,12 +61,13 @@ import java.util.ArrayList;
             Vial returnVial;
 
             // do not give the holding vial to the shuttle until the vial has been tagged
-            while (holdingVial.isEmpty() ||
-                (!holdingVial.isEmpty() && !holdingVial.get(0).isTagged())){
+            while (isEmpty() ||
+                (!isEmpty() && !holdingVial[0].isTagged())){
                 wait();
             }
 
-            returnVial = holdingVial.remove(0);
+            returnVial = holdingVial[0];
+            holdingVial[0] = null;
     
             // make a note of the event in output trace
             System.out.print(indentation + indentation);
@@ -80,12 +81,12 @@ import java.util.ArrayList;
         }
 
     private boolean isEmpty(){
-        return holdingVial.isEmpty();
+        return holdingVial[0] == null;
     }
 
     private void tagVial(){
-        holdingVial.get(0).setInspected();
-        holdingVial.get(0).setTagged();
+        holdingVial[0].setInspected();
+        holdingVial[0].setTagged();
     }
 
     
