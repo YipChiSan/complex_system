@@ -124,8 +124,10 @@ public class Carousel implements Destination {
         }
 
         //while there is no defective vial in the middle compartment, block this thread
-        while (!compartment[compartment.length / 2].isDefective()) {
-            wait();
+        while (compartment[compartment.length / 2] != null) {
+            if (!compartment[compartment.length / 2].isDefective()){
+                wait();
+            }
         }
 
         // get the vial
