@@ -4,7 +4,8 @@ import java.util.ArrayList;
  * An InspectionBay is to inspect the defective vaccine and tag them.
  */
 
- public class InspectionBay implements Destination{
+ public class InspectionBay
+    implements Destination{
 
     // The vial held by the inspection bay.
     private ArrayList<Vial> holdingVial = new ArrayList<>(); 
@@ -47,7 +48,7 @@ import java.util.ArrayList;
     }
 
     // Pass the inspected vial to the shuttle
-    public synchronized Vial getVial()
+    public synchronized Vial getVialByShuttle()
         throws OverloadException{
 
             // do not give the holding vial to the shuttle until the vial has been tagged

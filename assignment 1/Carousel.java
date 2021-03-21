@@ -77,6 +77,41 @@ public class Carousel implements Destination {
         notifyAll();
         return vial;
     }
+
+    /**
+     * Remove a vial from the middle compartment of the carousel
+     * 
+     * @return the removed vial
+     * @throws InterruptedException
+     *             if the thread executing is interrupted
+     */
+    public synchronized Vial getVialByShuttle() throws InterruptedException {
+
+    	// the vial to be removed
+        Vial vial;
+
+        // while there is no vial in the middle compartment, block this thread
+        while (compartment[compartment.length / 2] == null) {
+            wait();
+        }
+
+        //while there is no defective vial in the middle compartment, block this thread
+        while (!compartment[compartment.length / 2].isDefective()) {
+            wait();
+        }
+
+        // get the vial
+        vial = compartment[compartment.length / 2];
+        compartment[compartment.length / 2] = null;
+
+        // make a note of the event in output trace
+        System.out.print(indentation + indentation);
+        System.out.println(vial + " removed for inspection");
+
+        // notify any waiting threads that the carousel has changed
+        notifyAll();
+        return vial;
+    }
  
     /**
      * Rotate the carousel one position.
