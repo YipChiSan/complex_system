@@ -118,17 +118,14 @@ public class Carousel implements Destination {
     	// the vial to be removed
         Vial vial;
 
-        // while there is no vial in the middle compartment, block this thread
-        while (compartment[compartment.length / 2] == null) {
+        // while there is no vial in the middle compartment or the vial is not defective, block this thread
+        while (compartment[compartment.length / 2] == null || 
+            (compartment[compartment.length / 2] != null &&
+             !compartment[compartment.length / 2].isDefective())) {
             wait();
         }
 
-        //while there is no defective vial in the middle compartment, block this thread
-        while (compartment[compartment.length / 2] != null) {
-            if (!compartment[compartment.length / 2].isDefective()){
-                wait();
-            }
-        }
+       
 
         // get the vial
         vial = compartment[compartment.length / 2];
