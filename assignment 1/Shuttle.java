@@ -1,11 +1,11 @@
-import javax.print.attribute.standard.Destination;
+
 /**
  * A shuttle is to pass a vial from one place to another
  */
 
  public class Shuttle extends VaccineHandlingThread {
-    protected Destination start;
-    protected Destination destination;
+    Destination start;
+    Destination destination;
 
     /**
      * Create a new Shuttle to transfer vial from start to destination. 
