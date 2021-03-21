@@ -13,16 +13,23 @@ public class Sim {
         Producer producer = new Producer(carousel);
         Consumer consumer = new Consumer(carousel);
         CarouselDrive driver = new CarouselDrive(carousel);
+        InspectionBay inspectionBay = new InspectionBay();
+        InspectionBayDriver inspectionBayDriver = new InspectionBayDriver(inspectionBay);
+        Shuttle shuttle = new Shuttle(carousel, inspectionBay);
 
         // start threads
         consumer.start();
         producer.start();
         driver.start();
+        inspectionBayDriver.start();
+        shuttle.start();
 
         // check all threads still live
         while (consumer.isAlive() && 
                producer.isAlive() && 
-               driver.isAlive())
+               driver.isAlive() &&
+               inspectionBayDriver.isAlive() &&
+               shuttle.isAlive())
             try {
                 Thread.sleep(50);
             } catch (InterruptedException e) {
@@ -33,6 +40,8 @@ public class Sim {
         consumer.interrupt();
         producer.interrupt();
         driver.interrupt();
+        inspectionBayDriver.interrupt();
+        shuttle.interrupt();
 
         System.out.println("Sim terminating");
         System.out.println(VaccineHandlingThread.getTerminateException());
