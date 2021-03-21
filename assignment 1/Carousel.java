@@ -56,6 +56,7 @@ public class Carousel implements Destination {
      * @throws InterruptedException
      *            if the thread executing is interrupted.
      */
+    @Override
     public synchronized void putVialByShuttle(Vial vial)
             throws InterruptedException {
 
@@ -111,6 +112,7 @@ public class Carousel implements Destination {
      * @throws InterruptedException
      *             if the thread executing is interrupted
      */
+    @Override
     public synchronized Vial getVialByShuttle() throws InterruptedException {
 
     	// the vial to be removed

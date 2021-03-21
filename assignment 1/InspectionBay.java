@@ -14,6 +14,7 @@ import java.util.ArrayList;
     private ArrayList<Vial> holdingVial = new ArrayList<>(); 
 
     // Place a vial to the inspection bay
+    @Override
     public synchronized void putVialByShuttle(Vial vial) 
         throws InterruptedException{
         // while there is another vial in the way, block this thread
@@ -34,7 +35,7 @@ import java.util.ArrayList;
 
     // Inspect the vial at the inspection bay
     public synchronized void inspect()
-        throws OverloadException{
+        throws InterruptedException, OverloadException{
 
         // Inspection bay should wait until there is a vial in the inspection bay.
         while (isEmpty()){
@@ -43,17 +44,21 @@ import java.util.ArrayList;
 
         // Inspection cannot hold more than one vial.
         if (holdingVial.size() > 1) {
-            throw OverloadException("An inspection bay cannot hold more than one vial");
+            throw new OverloadException("An inspection bay cannot hold more than one vial");
         }
 
-        if(!holdingVial.get(0).isTagged()){
+        if(!holdingVial.get(0).isTagged() &&
+            holdingVial.get(0).isDefective()){
             tagVial();
         }
     }
 
     // Pass the inspected vial to the shuttle
+    @Override
     public synchronized Vial getVialByShuttle()
         throws InterruptedException{
+
+            Vial returnVial;
 
             // do not give the holding vial to the shuttle until the vial has been tagged
             while (holdingVial.isEmpty() ||
@@ -65,7 +70,7 @@ import java.util.ArrayList;
     
             // make a note of the event in output trace
             System.out.print(indentation + indentation);
-            System.out.println(vial + " removed from inspection bay");
+            System.out.println(returnVial + " removed from inspection bay");
 
             // notify any waiting threads that the carousel has changed
             notifyAll();

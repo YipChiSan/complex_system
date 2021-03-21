@@ -1,5 +1,4 @@
 import javax.print.attribute.standard.Destination;
-
 /**
  * A shuttle is to pass a vial from one place to another
  */
@@ -23,12 +22,13 @@ import javax.print.attribute.standard.Destination;
      * Loop infinitely to take vial from start tp destination
      */
     public void run(){
+        Vial holdingVial;
         while (!isInterrupted()){
             try{
-                holdingVial = start.getVialByShuttle();
-                destination.putVialByShuttle(holdingVial);
-                holdingVial = destination.getVialByShuttle();
-                start.putVialByShuttle(holdingVial);
+                holdingVial = this.start.getVialByShuttle();
+                this.destination.putVialByShuttle(holdingVial);
+                holdingVial = this.destination.getVialByShuttle();
+                this.start.putVialByShuttle(holdingVial);
             } catch (InterruptedException e){
                 this.interrupt();
             }
