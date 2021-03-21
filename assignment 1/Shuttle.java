@@ -26,8 +26,10 @@ import javax.print.attribute.standard.Destination;
         while (!isInterrupted()){
             try{
                 holdingVial = this.start.getVialByShuttle();
+                sleep(Params.SHUTTLE_TIME);
                 this.destination.putVialByShuttle(holdingVial);
                 holdingVial = this.destination.getVialByShuttle();
+                sleep(Params.SHUTTLE_TIME);
                 this.start.putVialByShuttle(holdingVial);
             } catch (InterruptedException e){
                 this.interrupt();

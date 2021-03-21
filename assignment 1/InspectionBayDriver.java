@@ -23,6 +23,7 @@
     public void run(){
         while (!isInterrupted()) {
             try {
+                Thread.sleep(Params.INSPECT_TIME);
                 inspectionBay.inspect();
             } catch (OverloadException e) {
                 this.interrupt();
