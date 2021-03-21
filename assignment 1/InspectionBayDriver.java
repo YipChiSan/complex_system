@@ -2,7 +2,7 @@
  * An Inspection bay driver is to inspect holding vial continuously. 
  */
 
- public class InspectionBayDriver extends Thread {
+ public class InspectionBayDriver extends VaccineHandlingThread  {
 
      protected InspectionBay inspectionBay;
      
@@ -11,7 +11,8 @@
       * @param inspectionBay
       */
     public InspectionBayDriver(InspectionBay inspectionBay){
-         this.inspectionBay = inspectionBay;
+        super(); 
+        this.inspectionBay = inspectionBay;
      }
 
     /**
