@@ -45,8 +45,10 @@ public class Carousel implements Destination {
         // insert the element at the specified location
         compartment[0] = vial;
 
-        // make a note of the event in output trace
-        System.out.println(vial + " inserted");
+        if (this.id == 1){        
+            // make a note of the event in output trace
+            System.out.println(vial + " inserted to Carousel" + this.id);
+        }
 
         // notify any waiting threads that the carousel state has changed
         notifyAll();
@@ -180,7 +182,7 @@ public class Carousel implements Destination {
     
     @Override
     public String getNameByShuttle(){
-        return "c" + "_" + this.id + "_0"; 
+        return "c" + "_" + this.id + "_1"; 
     }
 
 }

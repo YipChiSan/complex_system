@@ -69,7 +69,7 @@
             // show what is going on
             System.out.println(
                 indentation +
-                holdingVial +
+                returnVial +
                 " [ I" + " -> S" +" ]");
 
             // notify any waiting threads that the carousel has changed

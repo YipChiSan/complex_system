@@ -9,17 +9,20 @@
     final private static String indentation = "                  ";
     Destination start;
     Destination destination;
+   
 
 
 
     /**
      * Create a new Shuttle to transfer vial from start to destination. 
      * @param destinations
+     * @param start
      * @throws IllegalArgumentException
      */
     public Shuttle(Destination start, Destination destination) {
         super();
         this.start = start;
+     
         this.destination = destination;      
     }
 
@@ -33,12 +36,12 @@
                 holdingVial = this.start.getVialByShuttle();
                 sleep(Params.SHUTTLE_TIME);
 
-                this.destination.putVial(holdingVial);
                 System.out.println(
                     indentation +
                     holdingVial +
-                    " [ S" + " -> " + destination.getNameByShuttle() +" ]");
+                    " [ S"  + " -> " + this.destination.getNameByShuttle() + " ]");
 
+                this.destination.putVial(holdingVial);
                 
                 sleep(Params.SHUTTLE_TIME);
 
