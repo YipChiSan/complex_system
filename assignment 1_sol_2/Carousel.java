@@ -49,36 +49,6 @@ public class Carousel implements Destination {
     }
 
     /**
-     * Insert a vial into the carousel from Shuttle.
-     * 
-     * @param vial
-     *            the vial to insert into the carousel.
-     * @throws InterruptedException
-     *            if the thread executing is interrupted.
-     */
-    @Override
-    public synchronized void putVialByShuttle(Vial vial)
-            throws InterruptedException {
-
-    	// while there is another vial in the way, block this thread
-        while (compartment[compartment.length / 2] != null) {
-            wait();
-        }
-
-        // insert the element at the specified location
-        compartment[compartment.length / 2] = vial;
-
-        // make a note of the event in output trace
-        System.out.println(
-            indentation +
-            vial +
-            " [ S" + " -> c" + ((compartment.length / 2 + 1)) + " ]");
-
-        // notify any waiting threads that the carousel state has changed
-        notifyAll();
-    }
-
-    /**
      * Remove a vial from the final compartment of the carousel
      * 
      * @return the removed vial
