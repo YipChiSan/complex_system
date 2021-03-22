@@ -18,7 +18,7 @@
     }
     // Place a vial to the inspection bay
     @Override
-    public synchronized void putVialByShuttle(Vial vial) 
+    public synchronized void putVial(Vial vial) 
         throws InterruptedException{
         // while there is another vial in the way, block this thread
         while (!isEmpty()) {
@@ -66,6 +66,12 @@
             returnVial = holdingVial[0];
             holdingVial[0] = null;
 
+            // show what is going on
+            System.out.println(
+                indentation +
+                holdingVial +
+                " [ I" + " -> S" +" ]");
+
             // notify any waiting threads that the carousel has changed
             notifyAll();
             
@@ -80,6 +86,12 @@
     private void tagVial(){
         holdingVial[0].setInspected();
         holdingVial[0].setTagged();
+    }
+
+    @Override
+    public String getNameByShuttle() {
+        
+        return "I";
     }
 
     

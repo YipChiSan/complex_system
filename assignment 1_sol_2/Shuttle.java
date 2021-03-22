@@ -33,20 +33,16 @@
                 holdingVial = this.start.getVialByShuttle();
                 sleep(Params.SHUTTLE_TIME);
 
-                this.destination.putVialByShuttle(holdingVial);
+                this.destination.putVial(holdingVial);
                 System.out.println(
                     indentation +
                     holdingVial +
-                    " [ S" + " -> I" +" ]");
+                    " [ S" + " -> " + destination.getNameByShuttle() +" ]");
 
-                holdingVial = this.destination.getVialByShuttle();
-                System.out.println(
-                    indentation +
-                    holdingVial +
-                    " [ I" + " -> S" +" ]");
+                
                 sleep(Params.SHUTTLE_TIME);
 
-                this.start.putVialByShuttle(holdingVial);
+                
             } catch (InterruptedException e){
                 this.interrupt();
             }

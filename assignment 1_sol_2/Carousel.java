@@ -9,14 +9,18 @@ public class Carousel implements Destination {
     // the items in the carousel segments
     protected Vial[] compartment;
 
+    // the id for this carousel
+    private int id;
+
     // to help format output trace
     final private static String indentation = "                  ";
 
     /**
      * Create a new, empty carousel, initialised to be empty.
      */
-    public Carousel() {
-        compartment = new Vial[Params.CAROUSEL_SIZE];
+    public Carousel(int size, int id) {
+        this.id = id;
+        compartment = new Vial[size];
         for (int i = 0; i < compartment.length; i++) {
             compartment[i] = null;
         }
@@ -69,10 +73,6 @@ public class Carousel implements Destination {
         vial = compartment[compartment.length-1];
         compartment[compartment.length - 1] = null;
 
-        // make a note of the event in output trace
-        System.out.print(indentation + indentation);
-        System.out.println(vial + " removed");
-
         // notify any waiting threads that the carousel has changed
         notifyAll();
         return vial;
@@ -107,7 +107,7 @@ public class Carousel implements Destination {
         System.out.println(
             indentation +
             vial +
-            " [ c"+ ((compartment.length / 2 + 1)) + " -> S" +" ]");
+            " [ c"+ "_" + this.id + "_" + ((compartment.length / 2 + 1)) + " -> S" +" ]");
 
         // notify any waiting threads that the carousel has changed
         notifyAll();
@@ -151,7 +151,7 @@ public class Carousel implements Destination {
                 System.out.println(
                 		indentation +
                 		this.compartment[i-1] +
-                        " [ c" + (i) + " -> c" + (i+1) +" ]");
+                        " [ c" + "_" + this.id + "_" + (i) + " -> c" + "_" + this.id + "_" + (i+1) +" ]");
             }
             compartment[i] = compartment[i-1];
         }
@@ -176,6 +176,11 @@ public class Carousel implements Destination {
     
     public String toString() {
         return java.util.Arrays.toString(compartment);
+    }
+    
+    @Override
+    public String getNameByShuttle(){
+        return "c" + "_" + this.id + "_0"; 
     }
 
 }

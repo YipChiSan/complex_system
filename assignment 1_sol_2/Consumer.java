@@ -10,21 +10,32 @@ public class Consumer extends VaccineHandlingThread {
     // the carousel from which the consumer takes vials
     protected Carousel carousel;
 
+    // consumer id
+    private int id;
+
+    // format printing information
+    final private static String indentation = "                  ";
+
     /**
      * Create a new Consumer that consumes from a carousel
      */
-    public Consumer(Carousel carousel) {
+    public Consumer(Carousel carousel, int id) {
         super();
         this.carousel = carousel;
+        this.id = id;
     }
 
     /**
      * Loop indefinitely trying to get vials from the carousel
      */
     public void run() {
+        Vial vial;
         while (!isInterrupted()) {
             try {
-                carousel.getVial();
+                vial = carousel.getVial();
+                // make a note of the event in output trace
+                System.out.print(indentation + indentation);
+                System.out.println(vial + " removed by Consumer" + this.id);
 
                 // let some time pass ...
                 Random random = new Random();

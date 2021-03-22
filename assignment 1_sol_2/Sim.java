@@ -9,27 +9,39 @@ public class Sim {
     public static void main(String[] args) {
         
     	// Create system components
-        Carousel carousel = new Carousel();
-        Producer producer = new Producer(carousel);
-        Consumer consumer = new Consumer(carousel);
-        CarouselDrive driver = new CarouselDrive(carousel);
+        Carousel mainCarousel = new Carousel(5, 1);
+        Carousel subCarousel = new Carousel(2, 2);
+
+        Producer producer = new Producer(mainCarousel);
+        Consumer mainConsumer = new Consumer(mainCarousel, 1);
+        Consumer subConsumber = new Consumer(subCarousel, 2);
+
+        CarouselDrive mainDriver = new CarouselDrive(mainCarousel);
+        CarouselDrive subDriver = new CarouselDrive(subCarousel);
         InspectionBay inspectionBay = new InspectionBay();
         InspectionBayDriver inspectionBayDriver = new InspectionBayDriver(inspectionBay);
-        Shuttle shuttle = new Shuttle(carousel, inspectionBay);
+        Shuttle mainShuttle = new Shuttle(mainCarousel, inspectionBay);
+        Shuttle subShuttle = new Shuttle(inspectionBay, subCarousel);
 
         // start threads
-        consumer.start();
+        mainConsumer.start();
+        subConsumber.start();
         producer.start();
-        driver.start();
+        mainDriver.start();
+        subDriver.start();
         inspectionBayDriver.start();
-        shuttle.start();
+        mainShuttle.start();
+        subShuttle.start();
 
         // check all threads still live
-        while (consumer.isAlive() && 
+        while (mainConsumer.isAlive() && 
+               subConsumber.isAlive() &&
+               subDriver.isAlive() &&
+               subShuttle.isAlive() &&
                producer.isAlive() && 
-               driver.isAlive() &&
+               mainDriver.isAlive() &&
                inspectionBayDriver.isAlive() &&
-               shuttle.isAlive())
+               mainShuttle.isAlive())
             try {
                 Thread.sleep(50);
             } catch (InterruptedException e) {
@@ -37,11 +49,14 @@ public class Sim {
             }
 
         // interrupt other threads
-        consumer.interrupt();
+        mainConsumer.interrupt();
+        subConsumber.interrupt();
         producer.interrupt();
-        driver.interrupt();
+        mainDriver.interrupt();
+        subDriver.interrupt();
         inspectionBayDriver.interrupt();
-        shuttle.interrupt();
+        mainShuttle.interrupt();
+        subShuttle.interrupt();
 
         System.out.println("Sim terminating");
         System.out.println(VaccineHandlingThread.getTerminateException());
